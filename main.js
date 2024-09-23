@@ -31,9 +31,10 @@ function addTask() {
     li.classList.add("newTask");
     taskList.appendChild(li);
     
+    console.log(taskStorageArray);
 
     // Handle task completion
-    li.addEventListener("click", function () {
+    li.addEventListener("click", function (event) {
         //Toggles the CSS completed
         li.classList.toggle("completed");
 
@@ -47,6 +48,7 @@ function addTask() {
             if (index > -1) finishedTasksArray.splice(index, 1);
         }
         updateTaskCounts();
+        console.log(finishedTasksArray);
     });
 
     // Create and add delete button
@@ -57,13 +59,15 @@ function addTask() {
 
     // Handle task deletion
     deleteButton.addEventListener("click", function () {
+        event.stopPropagation()
+        const index = taskStorageArray.findIndex(task => task.id === newTask.id);
+        if (index > -1) taskStorageArray.splice(index, 1);
         li.remove();
-
-        taskStorageArray.splice(taskStorageArray.findIndex(newTask), 1);
+        updateTaskCounts();   
+        console.log(taskStorageArray);
     });
 
-    // Add task to array and update counts
-    
+        
     typeTask.value = "";
     
 }
@@ -82,6 +86,7 @@ function updateTaskCounts() {
 
 
     finishedTask.textContent = `Finished: ${finishedTasksArray.length}`;
+    // remainingTasks.textContent = `Remaining: ${taskStorageArray.length}`;
     
 
 }
