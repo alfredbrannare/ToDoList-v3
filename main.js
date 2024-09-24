@@ -20,7 +20,7 @@ function addTask() {
     }
 
     const taskValue = typeTask.value;
-    
+
     const newTask = { id: taskId++, text: taskValue, completed: false };
 
     taskStorageArray.push(newTask);
@@ -30,7 +30,7 @@ function addTask() {
     li.textContent = newTask.text;
     li.classList.add("newTask");
     taskList.appendChild(li);
-    
+
     console.log(taskStorageArray);
 
     // Handle task completion
@@ -39,13 +39,14 @@ function addTask() {
         li.classList.toggle("completed");
 
         //Pushes newTask into an array if it contains "completed"
-        if(li.classList.contains("completed")){
+        if (li.classList.contains("completed")) {
             newTask.completed = true;
             finishedTasksArray.push(newTask);
         } else {
             newTask.completed = false;
             const index = finishedTasksArray.findIndex(task => task.id === newTask.id);
             if (index > -1) finishedTasksArray.splice(index, 1);
+            console.log(finishedTasksArray);
         }
         updateTaskCounts();
         console.log(finishedTasksArray);
@@ -60,22 +61,26 @@ function addTask() {
     // Handle task deletion
     deleteButton.addEventListener("click", function () {
         event.stopPropagation()
+        //Remove from the taskStorageArray
         const index = taskStorageArray.findIndex(task => task.id === newTask.id);
         if (index > -1) taskStorageArray.splice(index, 1);
+        //Remove from the finishedTasksArray
+        const indexTwo = finishedTasksArray.findIndex(task => task.id === newTask.id);
+        if (indexTwo > -1) finishedTasksArray.splice(indexTwo, 1);
+        //Remove task
         li.remove();
-        updateTaskCounts();   
+        updateTaskCounts();
         console.log(taskStorageArray);
     });
 
-        
+
     typeTask.value = "";
-    
+
 }
 
 //Posts/displays the tasks complete or not completed
 function updateTaskCounts() {
 
-    
     let remainingTaskCount = taskStorageArray.length - completedTaskCount;
 
     // Fixed issue where remainingTasks became negative
@@ -83,10 +88,6 @@ function updateTaskCounts() {
         remainingTaskCount = 0;
     }
 
-
-
     finishedTask.textContent = `Finished: ${finishedTasksArray.length}`;
-    // remainingTasks.textContent = `Remaining: ${taskStorageArray.length}`;
-    
 
 }
